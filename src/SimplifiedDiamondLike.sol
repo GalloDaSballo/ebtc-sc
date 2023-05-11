@@ -67,6 +67,14 @@ contract SimplifiedDiamondLike {
         bytes data;
     }
 
+    function enableCallbackForCall() external {
+        require(msg.sender == address(this)); // Must call this via `execute` to explicitly set the flag
+        
+        DiamondLikeStorage storage ds = getStorage();
+
+        ds.settings.callbackEnabledForCall = true;
+    }
+
     /// @notice Execute a list of operations in sequence
     function execute(Operation[] calldata ops) external payable {
         require(msg.sender == owner);
