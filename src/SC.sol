@@ -1,16 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-/// @notice Heavily inspired by Gnosis Safe
-////    h/t Richard Meissner - @rmeissner
+import {Diamond} from "./Diamond.sol";
 
-contract SC {
-    address public owner;
-
-    mapping(bytes4 => address) permittedCallbackAddress; // TODO: Do we want / can we use? // Ideally enforced in impl
-
-    mapping(bytes4 => address) getCallbackHandler;
-
+abstract contract SC is Diamond {
     enum OperationType {
         call,
         delegatecall
@@ -26,11 +19,41 @@ contract SC {
         bytes data;
     }
 
+    // TODO: Move to diamond storage
+    address owner;
+    mapping(bytes4 => address) callbackHandler;
+    bool onlyCallbacks;
+
+    constructor(address _owner) {
+        owner = _owner;
+    }
+
+    struct CallbackSettings {
+        bool onlyCallbacks; // TODO: Refactor to allow not callbacks
+        uint256 callbackToggleCheck;
+    }
+
+    // TODO: Any setting must be put into a struct
+    // And then pseudo-randomized location to avoid clashes
+
     /// @notice Set the an address to delegate call to if called with that sig
     function setFallbackHandler(bytes4 sig, address handler) external {
         require(msg.sender == owner);
 
-        getCallbackHandler[sig] = handler;
+        // "execute((address,bool,uint128,uint128,bool,uint8,bytes)[])": "94b24d09"
+        require(sig != 0x94b24d09);
+        callbackHandler[sig] = handler;
+    }
+
+    function setOnlyCallbackMode(bool _isCallbackmode) external {
+        require(msg.sender == owner);
+
+        onlyCallbacks = _isCallbackmode;
+    }
+
+    // NOTE: Fallback
+    fallback() external payable override {
+        super._fallback();
     }
 
     /// @notice Execute a list of operations in sequence
