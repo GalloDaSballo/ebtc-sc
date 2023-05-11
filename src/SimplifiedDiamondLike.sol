@@ -114,6 +114,13 @@ contract SimplifiedDiamondLike {
         }
     }
 
+    receive() external payable {
+        // PHP is my favourite language
+    }
+    fallback() external payable {
+        _fallback();
+    }
+
     // DiamondLike Fallback
     function _fallback() internal {
         DiamondLikeStorage storage ds = getStorage();
