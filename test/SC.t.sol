@@ -9,7 +9,7 @@ contract SCTest is Test {
     address user_1 = address(1);
     function setUp() public {
         vm.startPrank(user_1);
-        c = SimplifiedDiamondLike(user_1);
+        c = new SimplifiedDiamondLike(user_1);
         vm.stopPrank();
     }
 
