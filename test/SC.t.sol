@@ -3,6 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import {SimplifiedDiamondLike} from "../src/SimplifiedDiamondLike.sol";
+
 contract SCTest is Test {
     SimplifiedDiamondLike c;
 
@@ -65,6 +66,10 @@ contract SCTest is Test {
 
     function test_basicSweep() public {
         // Send a token and sweep it out
+
+        // TODO: Deploy ERC20
+        // Send it
+        // Sweep it away
     }
 
     function test_setFlashloan() public {
