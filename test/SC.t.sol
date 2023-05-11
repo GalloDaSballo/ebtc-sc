@@ -3,15 +3,19 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import {SimplifiedDiamondLike} from "../src/SimplifiedDiamondLike.sol";
+import {Standard_Token} from "./MockERC20.sol";
 
 contract SCTest is Test {
     SimplifiedDiamondLike c;
+    Standard_Token erc20;
 
     address user_1 = address(1);
     function setUp() public {
         vm.startPrank(user_1);
         c = new SimplifiedDiamondLike(user_1);
         vm.stopPrank();
+
+        erc
     }
 
     function test_onlyOwner() public {
